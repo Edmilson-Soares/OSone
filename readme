@@ -1,0 +1,19 @@
+
+
+	go func() {
+		osone.mq.Service("/", "test", func(data string, replay func(err string, data string)) {
+			fmt.Println("Received data:", data)
+			replay("", "dddddddddddd")
+		})
+
+		osone.mq.Subscribe("/", "test.ok.test", func(message, topic string) {
+			//broker.Publish("test.2.test", "ddddd")
+			fmt.Println(message, topic)
+			res, err := osone.mq.Request("/", "test", "ddddd", 4*time.Second)
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			fmt.Println(res, "d555555")
+		})
+	}()
