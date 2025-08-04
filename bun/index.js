@@ -13,22 +13,28 @@ async function main() {
         console.log('Conectado com sucesso! ID:', client.ID);
 
         // 3. Assinar um tópico
-        client.subscribe('testtttrttt', (message, topic) => {
+        await client.subscribe('testtttrttt', (message, topic) => {
             console.log(`\nNova mensagem no tópico ${topic}:`, message);
         });
 
         // 4. Publicar uma mensagem
-        client.publish('testtttrttt', 'Olá do Node.js!');
+        let cont = 0
+        await client.publish('testtttrttt', 'Olá do Node.js!' + cont);
+        setInterval(async () => {
+            cont++
+            await client.publish('testtttrttt', 'Olá do Node.js!' + cont);
+        }, 200);
 
 
-        console.log('\nAguardando mensagens... (Ctrl+C para sair)');
-        await new Promise(resolve => setTimeout(resolve, 60000));
+
+        // console.log('\nAguardando mensagens... (Ctrl+C para sair)');
+        //  await new Promise(resolve => setTimeout(resolve, 60000));
 
     } catch (err) {
         console.error('Erro:', err.message);
     } finally {
         // 7. Desconectar
-        client.disconnect();
+        //   client.disconnect();
         console.log('Conexão encerrada.');
     }
 }
