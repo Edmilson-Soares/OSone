@@ -22,25 +22,17 @@ func (mq *MQ) handlePublish(virtual, topic, message string) {
 
 		return
 	}
+
 	topic_ := topic
 	if strings.HasPrefix(topic, "pub") {
 		topic_ = strings.Split(topic, "pub")[1]
 	}
 
 	for strtopic, _ := range mq.subscribers[virtual] {
+
 		if strings.HasPrefix(topic_, "mqtt::") {
 			re, err := RegexpStringMQtt(strtopic)
 			if err != nil {
-				for _, subId := range mq.subscribers[virtual][topic_] {
-					mq.send(subId, Message{
-						CMD:     "PUB",
-						Topic_:  topic_,
-						Virtual: virtual,
-						Topic:   strtopic,
-						Payload: message,
-					})
-
-				}
 				continue
 			}
 			if re.MatchString(topic_) {
@@ -57,23 +49,14 @@ func (mq *MQ) handlePublish(virtual, topic, message string) {
 
 			}
 		} else {
-			//topic_ := strings.Split(topic, "pubmqtt::")[1]
-			re, err := RegexpString(topic_)
-			if err != nil {
-				for _, subId := range mq.subscribers[virtual][topic_] {
-					mq.send(subId, Message{
-						CMD:     "PUB",
-						Topic_:  topic_,
-						Virtual: virtual,
-						Topic:   strtopic,
-						Payload: message,
-					})
 
-				}
+			//topic_ := strings.Split(topic, "pubmqtt::")[1]
+			re, err := RegexpString(strtopic)
+			if err != nil {
 
 				continue
 			}
-			if re.MatchString(strtopic) {
+			if re.MatchString(topic_) {
 				for _, subId := range mq.subscribers[virtual][strtopic] {
 					mq.send(subId, Message{
 						CMD:     "PUB",
