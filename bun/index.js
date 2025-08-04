@@ -8,7 +8,7 @@ async function main() {
         // 2. Conectar ao servidor MQ
         //  await client.connect('mq://apikey:8rQJ0Afl1sY3NfC57b67X4sgrciuUoVWFtKO4IZQSH_4HsfkVb8yYJAXfCF_nyJTdIpG0C1_IcCfG_Jn_5fJzj2W5osg3A90nPnq3cMi2Oysj8SNU_yuNSDfVw==@localhost:4222');
 
-        await client.connect('mq://root:chave-secreta-32-bytes-123456789@localhost:4052');
+        await client.connect('mq://root:chave-secreta-32-bytes-123456789@37.27.39.202:4052');
 
         console.log('Conectado com sucesso! ID:', client.ID);
 
