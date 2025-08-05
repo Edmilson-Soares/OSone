@@ -74,6 +74,8 @@ func (mq *MQ) handlePublish(virtual, topic, message string) {
 
 }
 func (mq *MQ) onSubscribe(message Message) error {
+	mq.mu.RLock()
+	defer mq.mu.RUnlock()
 	virtual := message.Virtual
 	if mq.subs_fun[virtual] == nil {
 		mq.subs_fun[virtual] = make(map[string][]func(message string, topic string))

@@ -25,4 +25,5 @@ func main() {
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 	<-sigCh
 	fmt.Println("\nEncerrando OSone...")
+
 }

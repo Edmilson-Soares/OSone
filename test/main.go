@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"osone/cmd/client"
+	client "osone/go"
 	"syscall"
 )
 
