@@ -32,7 +32,6 @@ func (mq *MQ) handleProcess(clientId string) {
 		case "SER":
 			go mq.handleService(clientId, virtual, msg.Topic)
 		case "REQ":
-
 			go mq.handleRequest(clientId, msg)
 		case "RES":
 			go mq.handleResponse(clientId, msg)

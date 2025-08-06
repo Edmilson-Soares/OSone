@@ -13,6 +13,7 @@ func (mq *MQ) handleRequest(clientId string, message Message) {
 	if mq.services[virtual] == nil {
 		mq.services[virtual] = make(map[string]string)
 	}
+
 	if serviceId, ok := mq.services[virtual][message.Topic]; ok {
 		mq.send(serviceId, Message{
 			CMD:     "REQ",

@@ -50,6 +50,10 @@ func (mc *MQ) send(clientId string, msg Message) error {
 	if err != nil {
 		return fmt.Errorf("erro ao codificar mensagem: %v", err)
 	}
+
+	if mc.clients[clientId].cnn == nil {
+		return nil
+	}
 	_, err = fmt.Fprintf(mc.clients[clientId].cnn, "%s\n", data)
 	return err
 }
@@ -61,6 +65,27 @@ func (mq *MQ) Start(port string) error {
 	if err != nil {
 		return err
 	}
+	mq.Service("/", "auth.connection", func(data string, replay func(err string, data string)) {
+
+		auth := map[string]string{}
+		mqtt, _ := json.Marshal(utils.Auth{
+			ID:        "root",
+			Username:  "root",
+			Password:  "",
+			Virtual:   "/",
+			VirtualId: "mybroker",
+			Permissions: utils.AuthPermission{
+				Subscribers: []string{"/#"},
+				Publichers:  []string{"/#"},
+			},
+		})
+		mqttAuth, _ := utils.Encrypt(string(mqtt))
+		auth["mqtt.info"] = string(mqtt)
+		auth["mqtt"] = mqttAuth
+		auth["mq"] = mqttAuth
+		bt, _ := json.Marshal(auth)
+		replay("", string(bt))
+	})
 
 	for {
 		conn, err := mq.listener.Accept()

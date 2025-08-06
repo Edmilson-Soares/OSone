@@ -22,14 +22,16 @@ func (mq *MQ) handlePublish(virtual, topic, message string) {
 
 		return
 	}
+
 	topic_ := topic
 	if strings.HasPrefix(topic, "pub") {
 		topic_ = strings.Split(topic, "pub")[1]
 	}
 
 	for strtopic, _ := range mq.subscribers[virtual] {
+
 		if strings.HasPrefix(topic_, "mqtt::") {
-			re, err := RegexpStringMQtt(topic_)
+			re, err := RegexpStringMQtt(strtopic)
 			if err != nil {
 				continue
 			}
@@ -47,8 +49,9 @@ func (mq *MQ) handlePublish(virtual, topic, message string) {
 
 			}
 		} else {
+
 			//topic_ := strings.Split(topic, "pubmqtt::")[1]
-			re, err := RegexpString(topic_)
+			re, err := RegexpString(strtopic)
 			if err != nil {
 
 				continue
@@ -71,6 +74,8 @@ func (mq *MQ) handlePublish(virtual, topic, message string) {
 
 }
 func (mq *MQ) onSubscribe(message Message) error {
+	mq.mu.RLock()
+	defer mq.mu.RUnlock()
 	virtual := message.Virtual
 	if mq.subs_fun[virtual] == nil {
 		mq.subs_fun[virtual] = make(map[string][]func(message string, topic string))

@@ -27,6 +27,8 @@ func (mq *MQ) handleSubscribe(clientId, virtual, topic string) {
 }
 func (mq *MQ) Subscribe(virtual, topic string, cb func(message, topic string)) error {
 	mq.handleSubscribe("mybroker", virtual, topic)
+	mq.mu.RLock()
+	defer mq.mu.RUnlock()
 	if mq.subs_fun[virtual] == nil {
 		mq.subs_fun[virtual] = make(map[string][]func(message string, topic string))
 	}
