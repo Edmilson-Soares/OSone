@@ -27,8 +27,7 @@ func main() {
 	fmt.Println("\nEncerrando OSone...")
 }
 
-/+
-
+/*
 func main() {
 
 	err := godotenv.Load()
@@ -46,4 +45,4 @@ func main() {
 	fmt.Println("\nEncerrando OSone...")
 }
 
-+/
+*/
